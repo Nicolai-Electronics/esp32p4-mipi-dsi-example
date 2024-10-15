@@ -132,10 +132,17 @@ void app_main(void)
             buf1[i+1] = 0xe0;
         }
     } else if (bytes_per_pixel == 3) {
-        for (size_t i = 0; i < draw_buffer_sz; i+=bytes_per_pixel) {
-            buf1[i+0] = 0;
-            buf1[i+1] = 0;
-            buf1[i+2] = 0xff;
+        const uint8_t colors[6][3] = { {0xE5, 0, 0}, {0xFF, 0x8D, 0x00}, {0xFF, 0xEE, 0x00}, {0x02, 0x81, 0x21}, {0x00, 0x4C, 0xFF}, {0x76, 0x00, 0x88} };
+        const size_t bar_height = v_res / 6;
+        const size_t bar_sz = bar_height * (h_res - 1) * bytes_per_pixel;
+        for (size_t i = 0; i < 6; ++i) {
+            const size_t offset = bar_sz * i;
+
+            for (size_t j = 0; j < bar_sz; j+=bytes_per_pixel) {
+                buf1[offset+j+0] = colors[i][2];
+                buf1[offset+j+1] = colors[i][1];
+                buf1[offset+j+2] = colors[i][0];
+            }
         }
     }
 
